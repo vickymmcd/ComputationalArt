@@ -1,4 +1,8 @@
-""" TODO: Put your header comment here """
+"""
+    Vicky McDermott
+    Computational Art Project
+    8/2017
+"""
 
 import random
 from PIL import Image
@@ -33,8 +37,12 @@ def evaluate_random_function(f, x, y):
         >>> evaluate_random_function(["y"],0.1,0.02)
         0.02
     """
-    # TODO: implement this
-    pass
+    if f == ["x"]:
+        return x
+    elif f == ["y"]:
+        return y
+    else:
+        return ''
 
 
 def remap_interval(val,
@@ -63,9 +71,21 @@ def remap_interval(val,
         1.0
         >>> remap_interval(5, 4, 6, 1, 2)
         1.5
+        >>> remap_interval(1, -2, 2, 0, 255)
+        191.25
+        >>> remap_interval(127.5, 0, 255, -1, 1)
+        0.0
     """
-    # TODO: implement this
-    pass
+    input_range = input_interval_end - input_interval_start
+    output_range = output_interval_end - output_interval_start
+    if input_range <= 0:
+        return output_range / 2
+    elif output_range <= 0:
+        return output_range
+    else:
+        dist_from_end = input_interval_end - val
+        end_away = ((output_range / input_range) * dist_from_end)
+        return output_interval_end - end_away
 
 
 def color_map(val):
@@ -143,8 +163,8 @@ if __name__ == '__main__':
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
-    # generate_art("myart.png")
+    generate_art("myart.png")
 
     # Test that PIL is installed correctly
     # TODO: Comment or remove this function call after testing PIL install
-    test_image("noise.png")
+    # test_image("noise.png")
