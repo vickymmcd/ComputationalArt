@@ -5,6 +5,7 @@
 """
 
 import random
+import math
 from PIL import Image
 
 
@@ -19,8 +20,17 @@ def build_random_function(min_depth, max_depth):
                  (see assignment writeup for details on the representation of
                  these functions)
     """
-    # TODO: implement this
-    pass
+    funcs = ["prod", "avg", "cos_pi", "sin_pi", "square", "cube", "quint",
+             "x", "y"]
+    depth = random.randint(min_depth, max_depth)
+    if depth == 1:
+        given_func = random.randint(7, 8)
+        return funcs[given_func]
+    else:
+        given_func = random.randint(0, 6)
+        return [funcs[given_func], build_random_function(depth-1,
+                                                         depth-1),
+                build_random_function(depth-1, depth-1)]
 
 
 def evaluate_random_function(f, x, y):
@@ -37,12 +47,26 @@ def evaluate_random_function(f, x, y):
         >>> evaluate_random_function(["y"],0.1,0.02)
         0.02
     """
-    if f == ["x"]:
+    if f[0] == "x":
         return x
-    elif f == ["y"]:
+    elif f[0] == "y":
         return y
-    else:
-        return ''
+    elif f[0] == "prod":
+        return evaluate_random_function(f[1], x, y) * \
+            evaluate_random_function(f[2], x, y)
+    elif f[0] == "avg":
+        return .5*(evaluate_random_function(f[1], x, y) +
+                   evaluate_random_function(f[2], x, y))
+    elif f[0] == "cos_pi":
+        return math.cos(math.pi*evaluate_random_function(f[1], x, y))
+    elif f[0] == "sin_pi":
+        return math.sin(math.pi*evaluate_random_function(f[1], x, y))
+    elif f[0] == "square":
+        return evaluate_random_function(f[1], x, y) ** 2
+    elif f[0] == "cube":
+        return evaluate_random_function(f[1], x, y) ** 3
+    elif f[0] == "quint":
+        return evaluate_random_function(f[1], x, y) ** 5
 
 
 def remap_interval(val,
@@ -136,9 +160,9 @@ def generate_art(filename, x_size=350, y_size=350):
         x_size, y_size: optional args to set image dimensions (default: 350)
     """
     # Functions for red, green, and blue channels - where the magic happens!
-    red_function = ["x"]
-    green_function = ["y"]
-    blue_function = ["x"]
+    red_function = build_random_function(7, 9)
+    green_function = build_random_function(7, 9)
+    blue_function = build_random_function(7, 9)
 
     # Create image and loop over all pixels
     im = Image.new("RGB", (x_size, y_size))
